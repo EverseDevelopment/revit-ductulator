@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Application Ductulator</Name>
+    <Assembly>Ductulator/Ductulator.dll</Assembly>
+    <FullClassName>Ductulator.App</FullClassName>
+    <ClientId>FB8E8820-DB2B-49E5-A299-11FDFB710910</ClientId>
+    <VendorId>E-verse</VendorId>
+    <VendorDescription>E-verser, http://E-verse.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>

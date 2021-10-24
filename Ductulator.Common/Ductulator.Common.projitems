@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>93484b9d-1b0e-47c7-aea4-4b2fedefc18b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Ductulator.Common</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\OverallSizes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\ResizeRectangular.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\TransformElm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\CurrentDuctShape.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\CurrentDuctType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\CurrentElmConn.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\DuctDiamEquiv.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\DuctSide_equiv.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\FabPartDefinition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\GetCalculatedSize.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\GetCurrentSelection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\ModelDuctTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Model\ModelUnits.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\CommonAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views Cs\CheckRatioRelation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views Cs\FabDuctFiltering.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views Cs\MainFormControllers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views Cs\TransformAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\MainForm.xaml.cs">
+      <DependentUpon>MainForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Resources.xaml.cs">
+      <DependentUpon>Resources.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\ControlDoubleClickBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\ShowSystemMenuBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\SystemMenuManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\WindowDragBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\WindowResizeBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\WarningForm.xaml.cs">
+      <DependentUpon>WarningForm.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Ductulator.addin" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)Images\DuctIcon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Images\Ductulator25x25-01.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)Images\DuctulatorPresentation-01.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Views\MainForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\WarningForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

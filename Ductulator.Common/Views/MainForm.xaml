@@ -1,0 +1,112 @@
+﻿<Window x:Class="Ductulator.MainForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Name="MainWindow"
+        Height="500" Width="318" 
+        MinHeight="500" MinWidth="318" 
+        MaxHeight="500" MaxWidth="280" 
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize" Title="Ductulator"
+        Style="{DynamicResource CustomWindowStyle}" >
+
+    <Border Background="White" BorderBrush="Transparent" BorderThickness="1,1,1,1" 
+            CornerRadius="8,8,8,8" Margin="15,-13,10,17" MouseDown="Border_MouseDown">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" Color="Gray" Opacity="0.3" ShadowDepth="0" Direction="0"></DropShadowEffect>
+        </Border.Effect>
+
+        <Grid Margin="9,9,11,0" Background="Transparent" Height="438" VerticalAlignment="Top">
+            <!--Title Bar elements-->
+            <Button Style="{DynamicResource CloseButtonStyle}" Name="TtitleButton" 
+                    Foreground="Black" BorderThickness="0" Click="Title_Link" 
+                    Background="Transparent" VerticalAlignment="Top" Height="39" FontSize="20" 
+                    FontWeight="Bold" Margin="8,4,133,0">DUCTULATOR</Button>
+            <Button Style="{DynamicResource CloseButtonStyle}" Name="CloseButton" 
+                   Foreground="Black" BorderThickness="0" Click="Close_Click" 
+                   Background="Transparent" VerticalAlignment="Top" Height="21" 
+                   FontSize="16" FontWeight="Bold" Margin="224,12,11,0">X</Button>
+            <Label Style="{DynamicResource Labels}" Content="{Binding Path=ProjectVersion}" 
+                   Margin="10,29,0,0" Height="24" VerticalAlignment="Top" FontFamily="Roboto" 
+                   HorizontalAlignment="Left" Width="37" RenderTransformOrigin="0.776,0.792" />
+
+            <!--Duct Size-->
+            <Label x:Name="dctSize_Label" Content="Duct size" HorizontalAlignment="Left" 
+                   Margin="8,88,0,0" VerticalAlignment="Top" Width="61" FontFamily="Roboto" 
+                   Height="27" Foreground="LightGray"/>
+            <TextBox x:Name="dctSize_textBox" Style="{DynamicResource MainTextBox}" 
+                   HorizontalAlignment="Left" Margin="97,88,0,0" 
+                   TextWrapping="Wrap" VerticalAlignment="Top" Width="159"
+                     IsReadOnly="True"/>
+
+            <!--Round duct equivalent size-->
+            <Label x:Name="rndDuct_Label" Content="Diam Eq." HorizontalAlignment="Left" 
+                   Margin="7,311,0,0" VerticalAlignment="Top" Width="96" 
+                   FontFamily="Roboto" Foreground="LightGray"/>
+            <TextBox x:Name="rndDuct_Textbox" Style="{DynamicResource MainTextBox}" 
+                   HorizontalAlignment="Left" Height="27" Margin="97,310,0,0" 
+                   TextWrapping="Wrap" VerticalAlignment="Top" Width="159"
+                     IsReadOnly="True"/>
+            <Label x:Name="rndDuct_Unit" Content="{Binding RelativeSource=
+                   {RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=UnitAbrev}"  
+                   HorizontalAlignment="Left" Margin="220,311,0,0" VerticalAlignment="Top" 
+                   Width="35" FontFamily="Roboto" Foreground="Black" Height="27"/>
+
+
+            <!--New duct Height-->
+            <Label x:Name="nDctHeight_Label" Content="Duct height" 
+                   HorizontalAlignment="Left" Margin="7,220,0,0" VerticalAlignment="Top" 
+                   Width="73" FontFamily="Roboto" Foreground="LightGray"/>
+            <TextBox x:Name="nDctHeight_textBox" Style="{DynamicResource MainTextBox}" 
+                   HorizontalAlignment="Left" Margin="97,220,0,0" 
+                   TextWrapping="Wrap" VerticalAlignment="Top" Width="159"
+                   TextChanged="textChangedEventHandler"/>
+            <Label x:Name="nDctHeight_Unit" Content="{Binding RelativeSource=
+                   {RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=UnitAbrev}"
+                   HorizontalAlignment="Left" Margin="220,223,0,0" VerticalAlignment="Top" 
+                   Width="35" FontFamily="Roboto" Foreground="Black" Height="27"/>
+
+            <!--New duct witdh-->
+            <Label x:Name="nDctWidth_Label" Content="Duct width" 
+                   HorizontalAlignment="Left" Margin="7,265,0,0" VerticalAlignment="Top"
+                   Width="66" FontFamily="Roboto" Foreground="LightGray"/>
+            <TextBox x:Name="nDctWidth_textBox" Style="{DynamicResource MainTextBox}" 
+                   HorizontalAlignment="Left" Margin="97,265,0,0" 
+                   TextWrapping="Wrap" VerticalAlignment="Top" Width="159"
+                   TextChanged="textChangedEventHandlerWidth"/>
+            <Label x:Name="nDctWidth_Unit" Content="{Binding RelativeSource=
+                {RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=UnitAbrev}"  
+                   HorizontalAlignment="Left" Margin="220,266,0,0" VerticalAlignment="Top" 
+                   Width="35" FontFamily="Roboto" Foreground="Black" Height="27"/>
+
+
+            <!--Type of duct-->
+            <Label x:Name="tpOfDuct_Label" Content="Duct type" HorizontalAlignment="Left"
+                   Margin="8,135,0,0" VerticalAlignment="Top" Width="60" 
+                   FontFamily="Roboto" Foreground="LightGray"/>
+            <ComboBox x:Name="DuctType_comboBox" ItemContainerStyle="{DynamicResource ComboItemStyle}"
+                      HorizontalAlignment="Left" Margin="97,133,0,0" VerticalAlignment="Top"
+                      Width="159" Height="27" SelectedValuePath="Value" DisplayMemberPath="Key"
+                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window,
+                      Mode=FindAncestor}, Path=DuctTypes}"/>
+
+            <Rectangle  HorizontalAlignment="Stretch"  VerticalAlignment="Top" 
+                        Fill="Gray" Height="1" Margin="19,189,8,0" Opacity="0.2"/>
+
+            <!--Button-->
+            <Button Name="button" Style="{DynamicResource MainButtonStyle}" 
+                    Content="Transform" HorizontalAlignment="Left" Margin="16,407,0,-2"
+                    VerticalAlignment="Top" Width="237" Tag="" Height="33" 
+                    Click="Transform_Click" />
+
+        </Grid>
+    </Border>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+</Window>
