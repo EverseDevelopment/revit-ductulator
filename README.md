@@ -30,11 +30,25 @@ This package is primarily managed by [E-verse](https://www.e-verse.co/) and by [
 ## Help improve Ductulator
 If you're interested in contributing to DynaFroge, just submit a [pull request](https://github.com/EverseDevelopment/DynaForge/pulls) or a [feature request](https://github.com/EverseDevelopment/DynaForge/issues) .
 
+<p align="center" width="100%">
+    <a href="[https://www.qries.com/](https://www.e-verse.com/)">
+    <img src="https://github.com/EverseDevelopment/DynaForge/blob/main/Assets/e-verse_logo_no%20slogan.jpg" width="732" height="271" align="center">
+    </a>
+</p>
+
+
+
 ## Installation
 Looking to get the ductulator add-in?  Check out [Autodesk app store](https://apps.autodesk.com/RVT/en/Detail/Index?id=6272106374266176068&appLang=en&os=Win64).
 
 ## About us ##
 
-Our team of AEC professionals, product designers, and software developers will work with you from initial assessment to software implementation.
+We are an international mix of AEC professionals, product designers, and software developers. We work together to transform construction requirements into accurate and partnership-driven technological solutions.
 
-[<img src="https://github.com/EverseDevelopment/DynaForge/blob/main/Assets/e-verse_logo_no%20slogan.jpg" width="325" height="100">](https://www.e-verse.com/)
+
+
+<p align="center" width="100%">
+    <a href="https://www.e-verse.com/">
+    <img src="https://github.com/EverseDevelopment/Ductulator/blob/main/Resources/e-verse_logo_no%20slogan.jpg" width="732" height="271" align="center">
+    </a>
+</p>
