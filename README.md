@@ -3,7 +3,7 @@
 This addin allow you to properly re-size your ducts and then modify it base on the new dimensions, you can also convert rectangular ducts into round and vice versa</h3>
 <br/>
 
-[<img src="https://github.com/EverseDevelopment/Ductulator/blob/main/Ductulator.Common/Images/DuctulatorPresentation-01.png" width="223" height="223">](https://github.com/EverseDevelopment/DynaForge/wiki)
+[<img src="https://s3.amazonaws.com/everse.assets/GithubReadme/DuctulatorPresentation-01.png" width="223" height="223">](https://github.com/EverseDevelopment/DynaForge/wiki)
 <br/>
 
 If you appreciate the work put into this free add-in, please give a review on the Autodesk AppStore. 
@@ -39,6 +39,6 @@ We are an international mix of AEC professionals, product designers, and softwar
 
 <p align="center" width="100%">
     <a href="https://www.e-verse.com/">
-    <img src="https://github.com/EverseDevelopment/Ductulator/blob/main/Resources/e-verse_logo_no%20slogan.jpg" width="732" height="271" align="center">
+    <img src="https://s3.amazonaws.com/everse.assets/GithubReadme/e-verse_logo_no+slogan.jpg"  align="center">
     </a>
 </p>
