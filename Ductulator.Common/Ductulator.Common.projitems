@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\OverallSizes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\ResizeRectangular.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Core\TransformElm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExternalCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\CurrentDuctShape.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\CurrentDuctType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\CurrentElmConn.cs" />
@@ -23,13 +24,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\GetCurrentSelection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ModelDuctTypes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\ModelUnits.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Service\RevitCollectorService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\CommonAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Hyperlink.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Links.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\SettingsConfig.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Theme.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\UIApplicationExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\UnitsManipulation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views Cs\CheckRatioRelation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views Cs\FabDuctFiltering.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views Cs\MainFormControllers.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views Cs\TransformAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\MainForm.xaml.cs">
       <DependentUpon>MainForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\Resources.xaml.cs">
       <DependentUpon>Resources.xaml</DependentUpon>
@@ -39,6 +48,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\SystemMenuManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\WindowDragBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\StyleableWindow\WindowResizeBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\UnitsWindow.xaml.cs">
+      <DependentUpon>UnitsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ViewModels\MainFormViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ViewModels\UnitsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ViewModels\ViewModelBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\WarningForm.xaml.cs">
       <DependentUpon>WarningForm.xaml</DependentUpon>
     </Compile>
@@ -62,7 +77,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="$(MSBuildThisFileDirectory)Views\Resources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\UnitsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

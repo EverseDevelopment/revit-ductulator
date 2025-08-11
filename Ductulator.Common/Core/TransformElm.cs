@@ -1,141 +1,116 @@
-﻿using Autodesk.Revit.DB;
-using System;
-using Ductulator.Model;
+﻿using System;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Mechanical;
+using Autodesk.Revit.DB.Fabrication;
 using Ductulator.Views;
+using Ductulator.Model;
 
 namespace Ductulator.Core
 {
     public static class TransformElm
     {
-        public static void Apply(Element elm, Document doc, ElementId typeId, 
-            string rndValue, string hghtValue, string wdthValue, double factor)
+        public static void Apply(Element elm, ElementId typeId,
+                                 double roundValue, double heightValue, double widthValue)
         {
+            if (elm == null) throw new ArgumentNullException(nameof(elm));
 
-            if (App.typeDuct == "Duct")
+            // Decide once
+            bool isRound = string.Equals(CurrentDuctShape.elmShape(elm), "Round", StringComparison.OrdinalIgnoreCase);
+
+            if (string.Equals(App.typeDuct, "Duct", StringComparison.OrdinalIgnoreCase))
             {
-                DuctTranform(elm, doc, typeId, 
-                    rndValue, hghtValue, wdthValue, factor);
+                TransformDuct(elm, typeId, isRound, roundValue, heightValue, widthValue);
             }
             else
             {
-                FabPartTranform(elm, doc, typeId,
-                    rndValue, hghtValue, wdthValue, factor);
+                TransformFabricationPart(elm, typeId, isRound, roundValue, heightValue, widthValue);
             }
         }
 
-        private static void DuctTranform(Element elm, Document doc, ElementId typeId,
-          string rndValue, string hghtValue, string wdthValue, double factor)
+        private static void TransformDuct(Element elm, ElementId typeId, bool isRound,
+                                          double roundValue, double heightValue, double widthValue)
         {
+            var doc = elm.Document;
+            var duct = elm as Duct ?? throw new InvalidOperationException("Element is not a Duct.");
 
-            Autodesk.Revit.DB.Mechanical.Duct ductelm =
-                elm as Autodesk.Revit.DB.Mechanical.Duct;
-
-
-            Autodesk.Revit.DB.Mechanical.DuctType selectedDuctType = null;
-            selectedDuctType = doc.GetElement(typeId)
-                as Autodesk.Revit.DB.Mechanical.DuctType;
-
-
-            using (Transaction t = new Transaction(doc, "transformDuct"))
+            // Change type + dimensions in one transaction
+            InTransaction(doc, "Transform Duct", () =>
             {
-                t.Start("Transform");
-                ductelm.DuctType = selectedDuctType;
-                t.Commit();
-            }
-            if (CurrentDuctShape.elmShape(elm) == "Round")
-            {
-                Parameter newDiameter = elm.get_Parameter(BuiltInParameter.RBS_CURVE_DIAMETER_PARAM);
-
-                using (Transaction tranround = new Transaction(doc, "parameter"))
+                // Change type (safer/more general than assigning DuctType)
+                if (typeId != ElementId.InvalidElementId && typeId != duct.GetTypeId())
                 {
-                    tranround.Start("param");
-                    try
-                    {
-                        newDiameter.Set(Convert.ToDouble(rndValue) / factor);
-                    }
-                    catch
-                    {
-
-                    }
-                    tranround.Commit();
-                }
-            }
-            else
-            {
-                Parameter newWidth = elm.get_Parameter(BuiltInParameter.RBS_CURVE_WIDTH_PARAM);
-                Parameter newHeight = elm.get_Parameter(BuiltInParameter.RBS_CURVE_HEIGHT_PARAM);
-
-                using (Transaction transac = new Transaction(doc, "parameter"))
-                {
-                    transac.Start("param");
-                    try
-                    {
-                        newWidth.Set(Convert.ToDouble(wdthValue) / factor);
-                        newHeight.Set(Convert.ToDouble(hghtValue) / factor);
-                    }
-                    catch
-                    {
-                    }
-                    transac.Commit();
+                    duct.ChangeTypeId(typeId);
                 }
 
-            }
+                if (isRound)
+                {
+                    TrySetParameter(duct, BuiltInParameter.RBS_CURVE_DIAMETER_PARAM, roundValue);
+                }
+                else
+                {
+                    TrySetParameter(duct, BuiltInParameter.RBS_CURVE_WIDTH_PARAM, widthValue);
+                    TrySetParameter(duct, BuiltInParameter.RBS_CURVE_HEIGHT_PARAM, heightValue);
+                }
+            });
         }
 
-        private static void FabPartTranform(Element elm, Document doc, ElementId typeId,
-            string rndValue, string hghtValue, string wdthValue, double factor)
+        private static void TransformFabricationPart(Element elm, ElementId typeId, bool isRound,
+                                                     double roundValue, double heightValue, double widthValue)
         {
-            FabricationPart fabPart = (FabricationPart)elm;
-
-            FabricationPartType selectedDuctType = null;
-            selectedDuctType = doc.GetElement(typeId)
-                as FabricationPartType;
+            var doc = elm.Document;
+            var fabPart = elm as FabricationPart ?? throw new InvalidOperationException("Element is not a FabricationPart.");
 
             try
-            { 
-            using (Transaction t = new Transaction(doc, "transformDuct"))
             {
-                t.Start("Transform");
-                fabPart.ChangeTypeId(typeId);
-                t.Commit();
-                    if (CurrentDuctShape.elmShape(elm) == "Round")
+                InTransaction(doc, "Transform Fabrication Part", () =>
+                {
+                    // Type change first (throws if connected/locked)
+                    if (typeId != ElementId.InvalidElementId && typeId != fabPart.GetTypeId())
                     {
-                        using (Transaction transac = new Transaction(doc, "parameter"))
-                        {
-                            transac.Start("param");
-                            FabricationDimensionDefinition Diameter =
-                                FabPartDefinition.elmDefinition(elm, "Diameter");
-                            fabPart.SetDimensionValue(Diameter, Convert.ToDouble(rndValue) / factor);
-                            transac.Commit();
-                        }
+                        fabPart.ChangeTypeId(typeId);
+                    }
+
+                    // Then set dimensions
+                    if (isRound)
+                    {
+                        var diameterDef = FabPartDefinition.elmDefinition(fabPart, "Diameter");
+                        if (diameterDef != null)
+                            fabPart.SetDimensionValue(diameterDef, roundValue);
                     }
                     else
                     {
-                        using (Transaction transac = new Transaction(doc, "parameter"))
-                        {
-
-
-                            transac.Start("param");
-                            FabricationDimensionDefinition Width =
-                                FabPartDefinition.elmDefinition(elm, "Width");
-                            fabPart.SetDimensionValue(Width, Convert.ToDouble(wdthValue) / factor);
-                            FabricationDimensionDefinition Height =
-                                FabPartDefinition.elmDefinition(elm, "Depth");
-                            fabPart.SetDimensionValue(Height, Convert.ToDouble(hghtValue) / factor);
-                            transac.Commit();
-                        }
+                        var widthDef = FabPartDefinition.elmDefinition(fabPart, "Width");
+                        var depthDef = FabPartDefinition.elmDefinition(fabPart, "Depth"); // Height in fabrication terms
+                        if (widthDef != null)
+                            fabPart.SetDimensionValue(widthDef, widthValue);
+                        if (depthDef != null)
+                            fabPart.SetDimensionValue(depthDef, heightValue);
                     }
-
-                }
-            }    
-             catch
-            {
-                WarningForm homewin = new WarningForm
-                    ("Fab parts type cannot be changed" +
-                    " if they are connected");
-                homewin.ShowDialog();
-
+                });
             }
+            catch
+            {
+                // Keep existing UX behavior, but avoid failing silently
+                var dlg = new WarningForm("Fab parts type cannot be changed if they are connected.");
+                dlg.ShowDialog();
+            }
+        }
+
+        private static void InTransaction(Document doc, string name, Action body)
+        {
+            using (var t = new Transaction(doc, name))
+            {
+                t.Start();
+                body();
+                t.Commit();
+            }
+        }
+
+        private static bool TrySetParameter(Element e, BuiltInParameter bip, double value)
+        {
+            var p = e.get_Parameter(bip);
+            if (p == null || p.IsReadOnly) return false;
+            return p.Set(value);
         }
     }
 }

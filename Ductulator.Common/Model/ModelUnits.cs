@@ -1,27 +1,30 @@
 ﻿using Autodesk.Revit.DB;
+using System.Windows.Controls;
 
 
 namespace Ductulator.Model
 {
     public static class ModelUnits
     {
-       
-        public static void unitsName(Element elm, ref string nameUnit, 
+
+        public static void unitsName(Element elm, ref string nameUnit,
             ref double factor, ref string unitAbrev, ref double Vfactor)
         {
-            if (App.typeDuct == "Duct")
-            {
-                string ductUnit = elm.get_Parameter
-               (BuiltInParameter.CURVE_ELEM_LENGTH).DisplayUnitType.ToString();
-                NameUnits(ductUnit, ref nameUnit, ref factor, ref unitAbrev, ref Vfactor);
-            }
-            else
-            {
-                string ductUnit = elm.get_Parameter
-               (BuiltInParameter.FABRICATION_PART_LENGTH).DisplayUnitType.ToString();
-                NameUnits(ductUnit, ref nameUnit, ref factor, ref unitAbrev, ref Vfactor);
-            }
-           
+            Document doc = App.RevitCollectorService.GetDocument();
+
+            Parameter ductParameter = App.typeDuct == "Duct"
+                ? elm.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)
+                : elm.get_Parameter(BuiltInParameter.FABRICATION_PART_LENGTH);
+
+            string ductUnit;
+
+            ForgeTypeId unitTypeId = doc.GetUnits()
+                .GetFormatOptions(ductParameter.Definition.GetDataType())
+                .GetUnitTypeId();
+
+            ductUnit = unitTypeId.TypeId;
+
+            NameUnits(ductUnit, ref nameUnit, ref factor, ref unitAbrev, ref Vfactor);
         }
 
 

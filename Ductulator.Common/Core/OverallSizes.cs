@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using Ductulator.Model;
+using System;
+using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace Ductulator.Core
 {
@@ -22,6 +24,7 @@ namespace Ductulator.Core
                 result.Add(b_Side.ToString());
                 temresult = temresult * 2 * factorConvertion(elm);
                 result.Add(temresult.ToString());
+
             }
             else
             {      
@@ -35,7 +38,40 @@ namespace Ductulator.Core
             return result;
         }
 
-        private static double factorConvertion(Element elm)
+
+        public static double RoundSize(Element elm)
+        {
+            Connector elmConn = CurrentElmConn.elmConn(elm);
+            var temresult = elmConn.Radius * 2;
+            return Math.Round(temresult, 2);
+        }
+
+        public static double HeigthSize(Element elm)
+        {
+            Connector elmConn = CurrentElmConn.elmConn(elm);
+
+            double result;
+            double b_Side = elmConn.Height;
+            result = Math.Round(b_Side, 2);
+
+            return result;
+        }
+
+        public static double WidthSize(Element elm)
+        {
+            Connector elmConn = CurrentElmConn.elmConn(elm);
+
+            double result;
+            double b_Side = elmConn.Width;
+
+            //ForgeTypeId currentUnit = GetUnitTypeId(elm);
+            //double converted = UnitUtils.Convert(b_Side, currentUnit, UnitTypeId.Inches);
+            result = Math.Round(b_Side, 2);
+
+            return result;
+        }
+
+        public static double factorConvertion(Element elm)
         {
             double result = 0;
             string NameUnits = null;
@@ -47,5 +83,20 @@ namespace Ductulator.Core
             return result;
         }
 
+        public static ForgeTypeId GetUnitTypeId(Element elm)
+        {
+            Document doc = App.RevitCollectorService.GetDocument();
+
+            Autodesk.Revit.DB.Parameter ductParameter = App.typeDuct == "Duct"
+                ? elm.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH)
+                : elm.get_Parameter(BuiltInParameter.FABRICATION_PART_LENGTH);
+
+            if (ductParameter == null || ductParameter.Definition == null)
+                throw new InvalidOperationException("Invalid parameter.");
+
+            return doc.GetUnits()
+                      .GetFormatOptions(ductParameter.Definition.GetDataType())
+                      .GetUnitTypeId();
+        }
     }
 }

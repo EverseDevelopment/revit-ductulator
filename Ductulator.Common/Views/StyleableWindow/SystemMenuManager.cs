@@ -11,7 +11,7 @@ namespace WpfStyleableWindow.StyleableWindow
 {
     public static class SystemMenuManager
     {        
-        public static void ShowMenu(Window targetWindow, Point menuLocation)
+        public static void ShowMenu(Window targetWindow, System.Windows.Point menuLocation)
         {
             if (targetWindow == null)
                 throw new ArgumentNullException("TargetWindow is null.");

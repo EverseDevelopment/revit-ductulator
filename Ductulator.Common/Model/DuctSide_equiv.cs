@@ -7,19 +7,8 @@ namespace Ductulator.Model
     {
         public static double Side_equiv(double diam)
         {
-            /* local variable declaration */
-            double result;
-
-            double tempSide;
-
-            //Obtain equivalent diameter
-            tempSide = Math.Sqrt((diam * diam)* Math.PI);
-
-
-            //Obtain equivalent side
-            result = Convert.ToInt32(Math.Round(tempSide));
-
-            return result;
+            double tempSide = 0.5 * diam * Math.Sqrt(Math.PI);
+            return Math.Round(tempSide);
         }
     }
 }

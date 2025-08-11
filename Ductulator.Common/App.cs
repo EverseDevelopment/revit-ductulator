@@ -2,20 +2,21 @@
 using Autodesk.Revit.DB;
 using System;
 using System.Windows.Media.Imaging;
-using System.Windows.Markup;
 using System.IO;
-using System.Collections.Generic;
-using Autodesk.Revit.ApplicationServices;
-using Autodesk.Revit.Attributes;
-using Ductulator.Views_Cs;
+using Ductulator.Common.Service;
+using Ductulator.Common.Utils;
+using System.Windows.Media;
+using System.Windows;
+using Autodesk.Windows;
+using System.Linq;
 
 namespace Ductulator
-{
-    
+{ 
     class App : Autodesk.Revit.UI.IExternalApplication
     {
-        static string AddInPath = typeof(App).Assembly.Location;
-        static string ButtonIconsFolder = Path.GetDirectoryName(AddInPath) + "\\Images\\";
+        public static RevitCollectorService RevitCollectorService;
+        private static readonly string RIBBONTAB = "e-verse";
+        private static readonly string HELPURL = @"https://e-verse.com";
 
         // Generate an Guid for the App
         static AddInId m_appId = new AddInId(new Guid(
@@ -29,37 +30,36 @@ namespace Ductulator
 
         public Autodesk.Revit.UI.Result OnStartup(UIControlledApplication application)
         {
-            // add new ribbon panel 
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel("Ductulator");
+            RevitCollectorService = new RevitCollectorService(application.GetUIApplication());
 
-            // Create a push button in the ribbon panel "NewRibbonPanel". 
-            // the add-in application "HelloWorld" will be triggered when button is pushed. 
-            PushButton pushButton = ribbonPanel.AddItem(new PushButtonData("Ductulator",
-                "Ductulator", ExecutingAssemblyPath, "Ductulator.MainCommand")) as PushButton;
+            Autodesk.Windows.RibbonControl ribbon = Autodesk.Windows.ComponentManager.Ribbon;
+            Autodesk.Windows.RibbonTab tab =
+            ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains("e-verse"));
 
-            pushButton.ToolTip = "Ductulator";
+            if (tab == null)
+            {
+                CreateRibbonTab(application, RIBBONTAB);
+            }
+
+            tab = ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains("e-verse"));
+
+
+            Autodesk.Revit.UI.RibbonPanel ribbonPanel = application.CreateRibbonPanel(RIBBONTAB, "Nancy");
+
+            PushButton pushButton = ribbonPanel.AddItem(new PushButtonData("Nancy",
+                "Nancy", ExecutingAssemblyPath, "Ductulator.MainCommand")) as PushButton;
+
+            pushButton.ToolTip = "Nancy - Ductulator";
 
             pushButton.LongDescription =
              "Properly re-size your ducts and then modify it base on the new dimensions" +
              " , you can also convert rectangular ducts into round and viceversa.";
 
-            // Set the large image shown on button.
-            pushButton.LargeImage =  new BitmapImage(new Uri(Path.Combine(ButtonIconsFolder, "Ductulator25x25-01.png"), UriKind.Absolute));
+            string logoPath = "M111.1 29.5L29 74.2v86.4l80.9 52.9l80.1-45.8V81.4L111.1 29.5z M181.3 82.8l-71.2 40.7L37.6 76.4l73.3-39.9 L181.3 82.8z M35 81.9l72 46.8v75.8l-72-47.1V81.9z M113 204.8v-76.1l71-40.6v76.1L113 204.8z M134 173.3l31-18.6v-36.8l-31 17.4V173.3z M140 142.7l16.7 10l-16.7 10V142.7z M159 147l-16.4-9.7l16.4-9.2 V147z";
+            pushButton.LargeImage = CreateLogo(logoPath);
 
-            // Context (F1) Help - new in 2013 
-            //string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData); // %AppData% 
-
-            string path;
-            path = System.IO.Path.GetDirectoryName(
-               System.Reflection.Assembly.GetExecutingAssembly().Location);
-
-            string newpath = Path.GetFullPath(Path.Combine(path, @"..\"));
-
-            ContextualHelp contextHelp = new ContextualHelp(
-                ContextualHelpType.ChmFile,
-                newpath + "Resources\\Help.html"); // hard coding for simplicity. 
-
-            pushButton.SetContextualHelp(contextHelp);
+            ContextualHelp contexHelp = new ContextualHelp(ContextualHelpType.Url, HELPURL);
+            pushButton.SetContextualHelp(contexHelp);
 
 
             return Result.Succeeded;
@@ -69,110 +69,55 @@ namespace Ductulator
         {
             return Result.Succeeded;
         }
-    }
 
-    
-
-    [Autodesk.Revit.Attributes.Transaction(TransactionMode.Manual)]
-    [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
-    [Autodesk.Revit.Attributes.Journaling(Autodesk.Revit.Attributes.JournalingMode.NoCommandData)]
-    public class MainCommand : IExternalCommand
-    {
-        Application _app;
-        Document _doc;
-
-        // Declare Need variables.
-        //
-        private ExternalCommandData cre_cmddata;
-        public ParameterSet ElementParameter = new ParameterSet();
-        public List<Parameter> ElementParameterList = new List<Parameter>();
-        public Element Selelement;
-        public List<Element> Elems;
-        public int NumberOfElements = 0;
-
-        public static MainForm homewin;
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        private BitmapSource CreateLogo(string logoPath, double size = 25)
         {
-            // objects for the top level access
-            //
-            this.cre_cmddata = commandData;
-            UIApplication uiApp = cre_cmddata.Application;
-            UIDocument uiDoc = uiApp.ActiveUIDocument;
-            _app = uiApp.Application;
-            _doc = uiDoc.Document;
+            Geometry pathGeometry = PathGeometry.Parse(logoPath);
+            Rect bounds = pathGeometry.Bounds;
 
-            ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
+            double scale = Math.Min(size / bounds.Width, size / bounds.Height);
 
-            //Number of selected elements
-            foreach (ElementId item in selectedIds)
+            TransformGroup transformGroup = new TransformGroup();
+            transformGroup.Children.Add(new ScaleTransform(scale, scale));
+            transformGroup.Children.Add(new TranslateTransform(
+                -bounds.X * scale + (size - bounds.Width * scale) / 2,
+                -bounds.Y * scale + (size - bounds.Height * scale) / 2));
+
+            GeometryDrawing drawing = new GeometryDrawing
             {
-                NumberOfElements += 1;
+                Geometry = pathGeometry,
+                Brush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(249, 79, 70)),
+                Pen = null
+            };
+
+            DrawingGroup drawingGroup = new DrawingGroup
+            {
+                Transform = transformGroup
+            };
+            drawingGroup.Children.Add(drawing);
+
+            DrawingVisual drawingVisual = new DrawingVisual();
+            using (DrawingContext context = drawingVisual.RenderOpen())
+            {
+                context.DrawDrawing(drawingGroup);
             }
 
+            RenderTargetBitmap bitmap = new RenderTargetBitmap((int)size, (int)size, 96, 96, PixelFormats.Pbgra32);
+            bitmap.Render(drawingVisual);
+            bitmap.Freeze();
 
-            if (NumberOfElements == 0)
+            return bitmap;
+        }
+
+        public static void CreateRibbonTab(UIControlledApplication application, string ribbonTabName)
+        {
+            RibbonControl ribbon = ComponentManager.Ribbon;
+            RibbonTab tab = ribbon.FindTab(ribbonTabName);
+
+            if (tab == null)
             {
-                // If no elements selected. 
-                TaskDialog.Show("Revit", "You haven't selected any elements.");
+                application.CreateRibbonTab(ribbonTabName);
             }
-            else
-            {
-                if (NumberOfElements > 1)
-                {
-                    // If you have selected more than 1 element. 
-                    TaskDialog.Show("Revit", "You have selected more than 1 element");
-                }
-                else
-                {
-                    //item selected
-                    foreach (ElementId item in selectedIds)
-                    {
-                        Selelement = _doc.GetElement(item);
-                    }
-
-                    int SelElmCategory = Selelement.Category.Id.IntegerValue;
-
-
-                    UIDocument ui_doc =
-                            commandData.Application.ActiveUIDocument;
-                    Autodesk.Revit.DB.Document doc = ui_doc.Document;
-
-                    if (SelElmCategory == -2008000 ||
-                        SelElmCategory == -2008193)
-                    {
-                        if(SelElmCategory == -2008000)
-                        {
-                            App.typeDuct = "Duct";
-                            homewin = new MainForm(commandData);
-                            homewin.ShowDialog();
-                        }
-                        else
-                        {
-                            if (FabDuctFiltering.straightSec(Selelement))
-                            {
-                                App.typeDuct = "FabPart";
-                                homewin = new MainForm(commandData);
-                                homewin.ShowDialog();
-                            }
-                            else
-                            {
-                                TaskDialog.Show
-                                    ("Revit", "You have not selected a straight Duct");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        TaskDialog.Show
-                            ("Revit", "You have not selected a Duct");
-                    }
-                }
-
-            }
-
-            return Autodesk.Revit.UI.Result.Succeeded;
-
         }
     }
-
 }

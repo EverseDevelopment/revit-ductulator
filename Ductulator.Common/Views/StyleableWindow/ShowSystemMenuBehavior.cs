@@ -86,7 +86,7 @@ namespace WpfStyleableWindow.StyleableWindow
             {
                 var element = ((UIElement)sender).GetValue(LeftButtonShowAt);
 
-                var showMenuAt = ((Visual)element).PointToScreen(new Point(0, 0));
+                var showMenuAt = ((Visual)element).PointToScreen(new System.Windows.Point(0, 0));
 
                 var targetWindow = ((UIElement)sender).GetValue(TargetWindow) as Window;
 

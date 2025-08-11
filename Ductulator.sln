@@ -1,66 +1,52 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29306.81
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Ductulator.Common", "Ductulator.Common\Ductulator.Common.shproj", "{93484B9D-1B0E-47C7-AEA4-4B2FEDEFC18B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2017", "Ductulator.2017\Ductulator.2017.csproj", "{797FB1EB-967C-411E-AFCC-5D2998D43B39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2023", "Ductulator.2023\Ductulator.2023.csproj", "{36959B95-E3A8-4E95-9165-69BCC4A0D3C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2018", "Ductulator.2018\Ductulator.2018.csproj", "{25434746-B12D-49FF-8DDE-73AC20C66740}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2024", "Ductulator.2024\Ductulator.2024.csproj", "{E68B640A-4616-46F4-B53B-B3D426AB6E9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2019", "Ductulator.2019\Ductulator.2019.csproj", "{C32B0913-D5E8-47C7-8411-DBFD0B7E5ED9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2025", "Ductulator.2025\Ductulator.2025.csproj", "{4C6D5914-FC2E-E149-3E7B-D77F0F55A248}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2020", "Ductulator.2020\Ductulator.2020.csproj", "{D521CEEF-F16A-443C-A4F2-87327252A209}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2021", "Ductulator.2021\Ductulator.2021.csproj", "{DF050A03-DF1A-4ADC-84D1-1F03A5454EB2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2022", "Ductulator.2022\Ductulator.2022.csproj", "{CF626C12-9BE2-47D4-9095-142C9EF7CAD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ductulator.2026", "Ductulator.2026\Ductulator.2026.csproj", "{331283B0-9260-9CB7-C992-8D8A5D6624DA}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Ductulator.Common\Ductulator.Common.projitems*{25434746-b12d-49ff-8dde-73ac20c66740}*SharedItemsImports = 4
-		Ductulator.Common\Ductulator.Common.projitems*{797fb1eb-967c-411e-afcc-5d2998d43b39}*SharedItemsImports = 4
-		Ductulator.Common\Ductulator.Common.projitems*{93484b9d-1b0e-47c7-aea4-4b2fedefc18b}*SharedItemsImports = 13
-		Ductulator.Common\Ductulator.Common.projitems*{c32b0913-d5e8-47c7-8411-dbfd0b7e5ed9}*SharedItemsImports = 4
-		Ductulator.Common\Ductulator.Common.projitems*{cf626c12-9be2-47d4-9095-142c9ef7cad9}*SharedItemsImports = 4
-		Ductulator.Common\Ductulator.Common.projitems*{d521ceef-f16a-443c-a4f2-87327252a209}*SharedItemsImports = 4
-		Ductulator.Common\Ductulator.Common.projitems*{df050a03-df1a-4adc-84d1-1f03a5454eb2}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{797FB1EB-967C-411E-AFCC-5D2998D43B39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{797FB1EB-967C-411E-AFCC-5D2998D43B39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{797FB1EB-967C-411E-AFCC-5D2998D43B39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{797FB1EB-967C-411E-AFCC-5D2998D43B39}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25434746-B12D-49FF-8DDE-73AC20C66740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25434746-B12D-49FF-8DDE-73AC20C66740}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25434746-B12D-49FF-8DDE-73AC20C66740}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25434746-B12D-49FF-8DDE-73AC20C66740}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C32B0913-D5E8-47C7-8411-DBFD0B7E5ED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C32B0913-D5E8-47C7-8411-DBFD0B7E5ED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C32B0913-D5E8-47C7-8411-DBFD0B7E5ED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C32B0913-D5E8-47C7-8411-DBFD0B7E5ED9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D521CEEF-F16A-443C-A4F2-87327252A209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D521CEEF-F16A-443C-A4F2-87327252A209}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D521CEEF-F16A-443C-A4F2-87327252A209}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D521CEEF-F16A-443C-A4F2-87327252A209}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF050A03-DF1A-4ADC-84D1-1F03A5454EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF050A03-DF1A-4ADC-84D1-1F03A5454EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF050A03-DF1A-4ADC-84D1-1F03A5454EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF050A03-DF1A-4ADC-84D1-1F03A5454EB2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF626C12-9BE2-47D4-9095-142C9EF7CAD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF626C12-9BE2-47D4-9095-142C9EF7CAD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF626C12-9BE2-47D4-9095-142C9EF7CAD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF626C12-9BE2-47D4-9095-142C9EF7CAD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36959B95-E3A8-4E95-9165-69BCC4A0D3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36959B95-E3A8-4E95-9165-69BCC4A0D3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36959B95-E3A8-4E95-9165-69BCC4A0D3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36959B95-E3A8-4E95-9165-69BCC4A0D3C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E68B640A-4616-46F4-B53B-B3D426AB6E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E68B640A-4616-46F4-B53B-B3D426AB6E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E68B640A-4616-46F4-B53B-B3D426AB6E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E68B640A-4616-46F4-B53B-B3D426AB6E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C6D5914-FC2E-E149-3E7B-D77F0F55A248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C6D5914-FC2E-E149-3E7B-D77F0F55A248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C6D5914-FC2E-E149-3E7B-D77F0F55A248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C6D5914-FC2E-E149-3E7B-D77F0F55A248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{331283B0-9260-9CB7-C992-8D8A5D6624DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{331283B0-9260-9CB7-C992-8D8A5D6624DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{331283B0-9260-9CB7-C992-8D8A5D6624DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{331283B0-9260-9CB7-C992-8D8A5D6624DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37895F52-7F69-4ADB-A4E8-83C47CD63FB9}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Ductulator.Common\Ductulator.Common.projitems*{331283b0-9260-9cb7-c992-8d8a5d6624da}*SharedItemsImports = 5
+		Ductulator.Common\Ductulator.Common.projitems*{36959b95-e3a8-4e95-9165-69bcc4a0d3c9}*SharedItemsImports = 4
+		Ductulator.Common\Ductulator.Common.projitems*{4c6d5914-fc2e-e149-3e7b-d77f0f55a248}*SharedItemsImports = 5
+		Ductulator.Common\Ductulator.Common.projitems*{93484b9d-1b0e-47c7-aea4-4b2fedefc18b}*SharedItemsImports = 13
+		Ductulator.Common\Ductulator.Common.projitems*{e68b640a-4616-46f4-b53b-b3d426ab6e9a}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal

@@ -40,7 +40,7 @@ namespace WpfStyleableWindow.StyleableWindow
 
         private static void OnExecuteCommandChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            var control = sender as Control;
+            var control = sender as System.Windows.Controls.Control;
 
             if (control != null)
             {
@@ -50,7 +50,7 @@ namespace WpfStyleableWindow.StyleableWindow
 
         static void control_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var control = sender as Control;
+            var control = sender as System.Windows.Controls.Control;
             
             if(control != null)
             {

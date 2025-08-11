@@ -1,4 +1,7 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Mechanical;
+using System;
+using static Ductulator.Common.Views.ViewModels.MainFormViewModel;
 
 
 namespace Ductulator.Model
@@ -33,6 +36,25 @@ namespace Ductulator.Model
                 }
             }
             return result;
+        }
+
+        public static DuctShapeEnum GetDuctShape(ElementId elementTypeId)
+        {
+            Document doc = App.RevitCollectorService.GetDocument();
+            MEPCurveType ductType = doc.GetElement(elementTypeId) as MEPCurveType;
+            if (ductType == null)
+                throw new ArgumentException("ElementId is not a valid MEPCurveType.");
+
+            if (ductType.Shape == ConnectorProfileType.Rectangular)
+            {
+                return DuctShapeEnum.Rectangular;
+            }
+            else
+            {
+                return DuctShapeEnum.Round;
+            }
+
+            throw new InvalidOperationException("Unable to determine duct shape.");
         }
     }
 }

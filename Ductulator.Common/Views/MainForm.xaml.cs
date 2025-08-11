@@ -1,85 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using Ductulator.Model;
+using Ductulator.Common.Utils;
+using Ductulator.Common.Views.ViewModels;
 using Ductulator.Core;
-using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using Ductulator.Views_Cs;
-using Ductulator.Views;
+using Ductulator.Model;
 using Ductulator.Utils;
+using Ductulator.Views;
+using Ductulator.Views_Cs;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using static Ductulator.Common.Views.ViewModels.UnitsViewModel;
 
 namespace Ductulator
 {
    
     public partial class MainForm : Window
     {
-        public static UIDocument uidoc { get; set; }
-        public static Document doc { get; set; }
         public static Element elm { get; set; }
-        public static double factor = 0;
         public static double Vfactor = 0;
         private Dictionary<string, ElementId> 
             ductTypes = new Dictionary<string, ElementId>();
-        public Dictionary<string, ElementId> DuctTypes
-        {
-            get
-            {
-                return ductTypes;
-            }
-        }
         public string unitAbrev = null;
-        public string UnitAbrev
-        {
-            get
-            {
-                return unitAbrev;
-            }
 
-
-        }
-
+        public MainFormViewModel ViewModel { get; private set; }
 
         public MainForm(ExternalCommandData cmddata_p)
         {
-            uidoc = cmddata_p.Application.ActiveUIDocument;
-            doc = uidoc.Document;
-
-            //Assign current selection
+            UIDocument uidoc = cmddata_p.Application.ActiveUIDocument;
+            Document doc = uidoc.Document;
             elm = GetCurrentSelection.elem(doc, uidoc);
 
-            //Assing abreviaion in current UI
-            string NameUnits = null;
-            ModelUnits.unitsName(elm, ref NameUnits,
-                ref factor, ref unitAbrev, ref Vfactor);
+            this.ViewModel = new MainFormViewModel(elm);
+            this.DataContext = ViewModel;
 
-           
-            this.DataContext = this;
             InitializeComponent();
 
-            
-            dctSize_textBox.Text = 
-                GetCalculatedSize.ElmCalSize(elm).AsString();
-
-            //Add duct types in current model
-            ductTypes = ModelDuctTypes.elmnt(doc);
-
-            //Current selection inf Duct Type
-            int termIndex = Array.IndexOf(ductTypes.Keys.ToArray(),
-                CurrentDuctType.ElmType(elm).ToString());
-            DuctType_comboBox.SelectedIndex = termIndex;
-
-            //Assing sizes to elements in current UI
-            nDctHeight_textBox.Text = OverallSizes.elmSize(elm)[0];
-            nDctWidth_textBox.Text = OverallSizes.elmSize(elm)[1];
-            rndDuct_Textbox.Text = OverallSizes.elmSize(elm)[2];
-
-            nDctHeight_textBox.Select(nDctHeight_textBox.Text.Length, 0);
-            nDctWidth_textBox.Select(nDctWidth_textBox.Text.Length, 0);
+            Theme.ApplyDarkLightMode(this.Resources.MergedDictionaries[0]);
         }
 
         public string projectVersion = CommonAssemblyInfo.Number;
@@ -96,10 +58,28 @@ namespace Ductulator
 
         private void Title_Link(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process
-                .Start("https://apps.autodesk.com/RVT/en/Detail" +
-                "/Index?id=6272106374266176068&appLang=en&os=Win64");
+            Hyperlink.Run(Links.ductulatorWebsite);
         }
+
+        private void Select_Units(object sender, RoutedEventArgs e)
+        {
+            var win = new UnitsWindow();
+            win.Owner = Window.GetWindow(this);
+
+            win.Closed += (_, __) =>
+            {
+                UnitOption selectedUnit = win.ViewModel.SelectedLengthUnit;
+                ViewModel.SelectedUnit = selectedUnit;
+            };
+
+            win.ShowDialog();
+        }
+
+        private void Everse_Link(object sender, RoutedEventArgs e)
+        {
+            Hyperlink.Run(Links.everseWebsite);
+        }
+
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -107,50 +87,73 @@ namespace Ductulator
 
         private void Transform_Click(object sender, RoutedEventArgs e)
         {
-            if (nDctHeight_textBox.Text == "" || nDctWidth_textBox.Text == "")
+            if (!IsValidNumber(nDctHeight_textBox.Text) || !IsValidNumber(nDctWidth_textBox.Text))
             {
-                TaskDialog.Show("Warning", "One or more values are empty");
+                MessageWindow.Show("One or more values are invalid");
             }
             else
             {
-                TransformAction.transform();
+
+                TransformElm.Apply(MainForm.elm, ViewModel.SelectedDuctTypeId,
+                    ViewModel.GetDiameterModelUnit(),
+                    ViewModel.GetLengthAModelUnit(),
+                    ViewModel.GetLengthBModelUnit());
+
+                this.Close();
             }
         }
 
-        /// <summary>
-        /// Ductulate and validate values
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void textChangedEventHandler(object sender, TextChangedEventArgs args)
+        private void TextBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            
-
-            nDctWidth_textBox.TextChanged -= textChangedEventHandlerWidth;
-            MainFormControllers.textBox_handler(Vfactor, nDctHeight_textBox,
-                   nDctWidth_textBox, OverallSizes.elmSize(elm)[2]);
-            nDctWidth_textBox.TextChanged += textChangedEventHandlerWidth;
-
-           
-
+            var textBox = sender as System.Windows.Controls.TextBox;
+            if (textBox != null)
+            {
+                textBox.CaretIndex = textBox.Text.Length;
+            }
         }
 
-        /// <summary>
-        /// Ductulate and validate values
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void textChangedEventHandlerWidth(object sender,
-            TextChangedEventArgs args)
-        {
-           
-            nDctHeight_textBox.TextChanged -= textChangedEventHandler;
-            MainFormControllers.textBox_handler(Vfactor, nDctWidth_textBox,
-                nDctHeight_textBox, OverallSizes.elmSize(elm)[2]);
-            nDctHeight_textBox.TextChanged += textChangedEventHandler;
+        private static readonly Regex _regex =
+            new Regex(@"^[0-9]*(?:[.,][0-9]*)?$");
 
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            System.Windows.Controls.TextBox textBox = sender as System.Windows.Controls.TextBox;
+            string fullText = textBox.Text.Insert(textBox.SelectionStart, e.Text);
+
+            e.Handled = !IsValidNumber(fullText);
+        }
+
+        private void NumberValidationTextBox_Paste(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                string pasteText = (string)e.DataObject.GetData(typeof(string));
+                System.Windows.Controls.TextBox textBox = sender as System.Windows.Controls.TextBox;
+                string fullText = textBox.Text.Insert(textBox.SelectionStart, pasteText);
+
+                if (!IsValidNumber(fullText))
+                    e.CancelCommand();
+            }
+            else
+            {
+                e.CancelCommand();
+            }
+        }
+
+        private bool IsValidNumber(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return true;
+
+            if (!_regex.IsMatch(text))
+                return false;
+
+            if (double.TryParse(text.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
+            {
+                return value > 0;
+            }
+
+            return false;
         }
     }
-
-
 }
