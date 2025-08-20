@@ -4,30 +4,28 @@ using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.DB.Fabrication;
 using Ductulator.Views;
 using Ductulator.Model;
+using static Ductulator.Common.Views.ViewModels.MainFormViewModel;
 
 namespace Ductulator.Core
 {
     public static class TransformElm
     {
-        public static void Apply(Element elm, ElementId typeId,
+        public static void Apply(Element elm, ElementId typeId, DuctShapeEnum ductShape,
                                  double roundValue, double heightValue, double widthValue)
         {
             if (elm == null) throw new ArgumentNullException(nameof(elm));
 
-            // Decide once
-            bool isRound = string.Equals(CurrentDuctShape.elmShape(elm), "Round", StringComparison.OrdinalIgnoreCase);
-
             if (string.Equals(App.typeDuct, "Duct", StringComparison.OrdinalIgnoreCase))
             {
-                TransformDuct(elm, typeId, isRound, roundValue, heightValue, widthValue);
+                TransformDuct(elm, typeId, ductShape, roundValue, heightValue, widthValue);
             }
             else
             {
-                TransformFabricationPart(elm, typeId, isRound, roundValue, heightValue, widthValue);
+                TransformFabricationPart(elm, typeId, ductShape, roundValue, heightValue, widthValue);
             }
         }
 
-        private static void TransformDuct(Element elm, ElementId typeId, bool isRound,
+        private static void TransformDuct(Element elm, ElementId typeId, DuctShapeEnum ductShape,
                                           double roundValue, double heightValue, double widthValue)
         {
             var doc = elm.Document;
@@ -42,7 +40,7 @@ namespace Ductulator.Core
                     duct.ChangeTypeId(typeId);
                 }
 
-                if (isRound)
+                if (ductShape == DuctShapeEnum.Round)
                 {
                     TrySetParameter(duct, BuiltInParameter.RBS_CURVE_DIAMETER_PARAM, roundValue);
                 }
@@ -54,7 +52,7 @@ namespace Ductulator.Core
             });
         }
 
-        private static void TransformFabricationPart(Element elm, ElementId typeId, bool isRound,
+        private static void TransformFabricationPart(Element elm, ElementId typeId, DuctShapeEnum ductShape,
                                                      double roundValue, double heightValue, double widthValue)
         {
             var doc = elm.Document;
@@ -71,7 +69,7 @@ namespace Ductulator.Core
                     }
 
                     // Then set dimensions
-                    if (isRound)
+                    if (ductShape == DuctShapeEnum.Round)
                     {
                         var diameterDef = FabPartDefinition.elmDefinition(fabPart, "Diameter");
                         if (diameterDef != null)
@@ -80,7 +78,7 @@ namespace Ductulator.Core
                     else
                     {
                         var widthDef = FabPartDefinition.elmDefinition(fabPart, "Width");
-                        var depthDef = FabPartDefinition.elmDefinition(fabPart, "Depth"); // Height in fabrication terms
+                        var depthDef = FabPartDefinition.elmDefinition(fabPart, "Depth");
                         if (widthDef != null)
                             fabPart.SetDimensionValue(widthDef, widthValue);
                         if (depthDef != null)
@@ -90,9 +88,8 @@ namespace Ductulator.Core
             }
             catch
             {
-                // Keep existing UX behavior, but avoid failing silently
-                var dlg = new WarningForm("Fab parts type cannot be changed if they are connected.");
-                dlg.ShowDialog();
+
+                MessageWindow.Show("Fab parts type cannot be changed if they are connected.");
             }
         }
 

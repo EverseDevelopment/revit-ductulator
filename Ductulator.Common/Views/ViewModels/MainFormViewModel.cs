@@ -28,6 +28,7 @@ namespace Ductulator.Common.Views.ViewModels
         private bool isUpdatingSize = false;
         private static string currentDuctSizeAsString;
         private static string currentDuctTypeAsString;
+        private static string projectVersion;
         private static double desiredDiameterDuct;
 
         private static UnitOption selectedUnit;
@@ -63,6 +64,7 @@ namespace Ductulator.Common.Views.ViewModels
 
             lastSelectedUnit = new UnitOption("Feet (decimal)", "ft", UnitTypeId.Feet);
             SelectedUnit = UnitsManipulation.selectedUnit();
+            ProjectVersion = "1.0.0.0";
         }
 
         public string CurrentDuctSizeAsString
@@ -85,6 +87,17 @@ namespace Ductulator.Common.Views.ViewModels
             }
         }
 
+        public string ProjectVersion
+        {
+            get => projectVersion;
+            set
+            {
+                projectVersion = value;
+                OnPropertyChanged();
+            }
+        }
+
+        
         public UnitOption SelectedUnit
         {
             get => selectedUnit;
@@ -172,9 +185,8 @@ namespace Ductulator.Common.Views.ViewModels
             get => desiredALengthDuct;
             set
             {
-                if (value < MinInches)
+                if (value < MinInches || double.IsNaN(value) || double.IsInfinity(value))
                 {
-                    OnPropertyChanged(nameof(DesiredALengthDuct));
                     return;
                 }
 
@@ -185,9 +197,14 @@ namespace Ductulator.Common.Views.ViewModels
                 if (!isUpdatingSize)
                 {
                     isUpdatingSize = true;
-                    desiredBLengthDuct = ResizeRectangular.Ductulate(0.1, DesiredDiameterDuct, desiredALengthDuct);
-                    _lastValidB = desiredBLengthDuct;
-                    OnPropertyChanged(nameof(DesiredBLengthDuct));
+                    double newB = ResizeRectangular.Ductulate(0.1, DesiredDiameterDuct, desiredALengthDuct);
+
+                    if (newB >= MinInches)
+                    {
+                        desiredBLengthDuct = newB;
+                        _lastValidB = desiredBLengthDuct;
+                        OnPropertyChanged(nameof(DesiredBLengthDuct));
+                    }
                     isUpdatingSize = false;
                 }
             }
@@ -198,9 +215,8 @@ namespace Ductulator.Common.Views.ViewModels
             get => desiredBLengthDuct;
             set
             {
-                if (value < MinInches)
+                if (value < MinInches || double.IsNaN(value) || double.IsInfinity(value))
                 {
-                    OnPropertyChanged(nameof(DesiredBLengthDuct));
                     return;
                 }
 
@@ -211,9 +227,14 @@ namespace Ductulator.Common.Views.ViewModels
                 if (!isUpdatingSize)
                 {
                     isUpdatingSize = true;
-                    desiredALengthDuct = ResizeRectangular.Ductulate(0.1, DesiredDiameterDuct, desiredBLengthDuct);
-                    _lastValidA = desiredALengthDuct;
-                    OnPropertyChanged(nameof(DesiredALengthDuct));
+                    double newA = ResizeRectangular.Ductulate(0.1, DesiredDiameterDuct, desiredBLengthDuct);
+
+                    if (newA >= MinInches)
+                    {
+                        desiredALengthDuct = newA;
+                        _lastValidA = desiredALengthDuct;
+                        OnPropertyChanged(nameof(DesiredALengthDuct));
+                    }
                     isUpdatingSize = false;
                 }
             }

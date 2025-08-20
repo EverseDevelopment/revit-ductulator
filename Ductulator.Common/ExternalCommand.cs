@@ -4,6 +4,7 @@ using Autodesk.Revit.UI;
 using Ductulator.Views_Cs;
 using System.Collections.Generic;
 using Ductulator.Views;
+using System.Linq;
 
 namespace Ductulator
 {
@@ -35,31 +36,20 @@ namespace Ductulator
 
             ICollection<ElementId> selectedIds = uiDoc.Selection.GetElementIds();
 
-            //Number of selected elements
-            foreach (ElementId item in selectedIds)
-            {
-                NumberOfElements += 1;
-            }
 
-
-            if (NumberOfElements == 0)
+            if (selectedIds.Count == 0)
             {
-                MessageWindow.Show("You haven't selected any elements.");
+                MessageWindow.Show("You haven't selected any ducts");
             }
             else
             {
-                if (NumberOfElements > 1)
+                if (selectedIds.Count > 1)
                 {
-                    // If you have selected more than 1 element. 
                     MessageWindow.Show("You have selected more than 1 element");
                 }
                 else
                 {
-                    //item selected
-                    foreach (ElementId item in selectedIds)
-                    {
-                        Selelement = _doc.GetElement(item);
-                    }
+                    Selelement = _doc.GetElement(selectedIds.First());
 
                     int SelElmCategory;
                     #if REVIT2026
@@ -67,8 +57,6 @@ namespace Ductulator
                     #else
                     SelElmCategory = Selelement.Category.Id.IntegerValue;
                     #endif
-
-
 
                     UIDocument ui_doc =
                             commandData.Application.ActiveUIDocument;

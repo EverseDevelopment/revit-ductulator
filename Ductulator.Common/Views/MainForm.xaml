@@ -247,7 +247,7 @@
                              TextWrapping="Wrap" 
                              VerticalAlignment="Top" 
                              Width="206"
-                             Text="{Binding DesiredDiameterDuct}"
+                             Text="{Binding DesiredDiameterDuct, StringFormat=N2}"
                              Background="{DynamicResource ReadOnlyBackgroundColor}"
                              IsReadOnly="True"/>
 
@@ -332,7 +332,8 @@
                    Content="{Binding Path=ProjectVersion}" 
                    VerticalAlignment="Bottom" 
                    FontFamily="Roboto" 
-                   HorizontalAlignment="Left"/>
+                   HorizontalAlignment="Left" Height="20">
+            </Label>
 
         </Grid>
     </Border>

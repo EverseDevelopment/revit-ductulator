@@ -7,7 +7,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 
-		<AssemblyName>Ductulator_2026</AssemblyName>
+		<AssemblyName>Ductulator</AssemblyName>
 		<RootNamespace>Ductulator</RootNamespace>
 		<Configurations>Debug;Release</Configurations>
 		<Platforms>AnyCPU;x64;x86</Platforms>

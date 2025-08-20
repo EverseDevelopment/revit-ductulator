@@ -16,7 +16,8 @@ namespace Ductulator
     {
         public static RevitCollectorService RevitCollectorService;
         private static readonly string RIBBONTAB = "e-verse";
-        private static readonly string HELPURL = @"https://e-verse.com";
+        private static readonly string RIBBONPANEL = "Ductulator";
+        private static readonly string BUTTONNAME = "Nancy";
 
         // Generate an Guid for the App
         static AddInId m_appId = new AddInId(new Guid(
@@ -34,20 +35,20 @@ namespace Ductulator
 
             Autodesk.Windows.RibbonControl ribbon = Autodesk.Windows.ComponentManager.Ribbon;
             Autodesk.Windows.RibbonTab tab =
-            ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains("e-verse"));
+            ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains(RIBBONTAB));
 
             if (tab == null)
             {
                 CreateRibbonTab(application, RIBBONTAB);
             }
 
-            tab = ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains("e-verse"));
+            tab = ribbon.Tabs.FirstOrDefault(tabAbout => tabAbout.Id.Contains(RIBBONTAB));
 
 
-            Autodesk.Revit.UI.RibbonPanel ribbonPanel = application.CreateRibbonPanel(RIBBONTAB, "Nancy");
+            Autodesk.Revit.UI.RibbonPanel ribbonPanel = application.CreateRibbonPanel(RIBBONTAB, RIBBONPANEL);
 
-            PushButton pushButton = ribbonPanel.AddItem(new PushButtonData("Nancy",
-                "Nancy", ExecutingAssemblyPath, "Ductulator.MainCommand")) as PushButton;
+            PushButton pushButton = ribbonPanel.AddItem(new PushButtonData(BUTTONNAME,
+                BUTTONNAME, ExecutingAssemblyPath, "Ductulator.MainCommand")) as PushButton;
 
             pushButton.ToolTip = "Nancy - Ductulator";
 
@@ -58,7 +59,7 @@ namespace Ductulator
             string logoPath = "M111.1 29.5L29 74.2v86.4l80.9 52.9l80.1-45.8V81.4L111.1 29.5z M181.3 82.8l-71.2 40.7L37.6 76.4l73.3-39.9 L181.3 82.8z M35 81.9l72 46.8v75.8l-72-47.1V81.9z M113 204.8v-76.1l71-40.6v76.1L113 204.8z M134 173.3l31-18.6v-36.8l-31 17.4V173.3z M140 142.7l16.7 10l-16.7 10V142.7z M159 147l-16.4-9.7l16.4-9.2 V147z";
             pushButton.LargeImage = CreateLogo(logoPath);
 
-            ContextualHelp contexHelp = new ContextualHelp(ContextualHelpType.Url, HELPURL);
+            ContextualHelp contexHelp = new ContextualHelp(ContextualHelpType.Url, Links.ductulatorWebsite);
             pushButton.SetContextualHelp(contexHelp);
 
 

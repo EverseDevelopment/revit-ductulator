@@ -94,7 +94,9 @@ namespace Ductulator
             else
             {
 
-                TransformElm.Apply(MainForm.elm, ViewModel.SelectedDuctTypeId,
+                TransformElm.Apply(elm, 
+                    ViewModel.SelectedDuctTypeId,
+                    ViewModel.CurrentductShape,
                     ViewModel.GetDiameterModelUnit(),
                     ViewModel.GetLengthAModelUnit(),
                     ViewModel.GetLengthBModelUnit());

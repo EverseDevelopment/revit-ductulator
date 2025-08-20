@@ -1,6 +1,5 @@
 ﻿using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Mechanical;
-using System;
+using System.Linq;
 using static Ductulator.Common.Views.ViewModels.MainFormViewModel;
 
 
@@ -26,7 +25,12 @@ namespace Ductulator.Model
             }
             else
             {
-                if (elm.get_Parameter(BuiltInParameter.FABRICATION_PART_DIAMETER_IN)?.AsValueString() != null)
+                FabricationPart part = App.RevitCollectorService.GetDocument().GetElement(elm.Id) as FabricationPart;
+                ConnectorManager cm = part.ConnectorManager;
+                Connector first = cm.Connectors.Cast<Connector>().FirstOrDefault();
+                ConnectorProfileType shape = first.Shape;
+
+                if (shape == ConnectorProfileType.Round)
                 {
                     result = "Round";
                 }
@@ -40,21 +44,42 @@ namespace Ductulator.Model
 
         public static DuctShapeEnum GetDuctShape(ElementId elementTypeId)
         {
-            Document doc = App.RevitCollectorService.GetDocument();
-            MEPCurveType ductType = doc.GetElement(elementTypeId) as MEPCurveType;
-            if (ductType == null)
-                throw new ArgumentException("ElementId is not a valid MEPCurveType.");
 
-            if (ductType.Shape == ConnectorProfileType.Rectangular)
+            if (App.typeDuct == "Duct")
             {
-                return DuctShapeEnum.Rectangular;
+                Document doc = App.RevitCollectorService.GetDocument();
+                MEPCurveType ductType = doc.GetElement(elementTypeId) as MEPCurveType;
+
+                if (ductType.Shape == ConnectorProfileType.Rectangular || ductType.Shape == ConnectorProfileType.Oval)
+                {
+                    return DuctShapeEnum.Rectangular;
+                }
+                else
+                {
+                    return DuctShapeEnum.Round;
+                }
             }
             else
             {
-                return DuctShapeEnum.Round;
-            }
+                Document doc = App.RevitCollectorService.GetDocument();
+                FabricationPartType ductType = doc.GetElement(elementTypeId) as FabricationPartType;
 
-            throw new InvalidOperationException("Unable to determine duct shape.");
+                if (ductType.FamilyName.Contains("Oval"))
+                {
+                    return DuctShapeEnum.Rectangular;
+                }
+
+
+                if (ductType.FamilyName.Contains("Pipe") || ductType.FamilyName.Contains("Round"))
+                {
+                    return DuctShapeEnum.Round;
+                }
+                else
+                {
+                    return DuctShapeEnum.Rectangular;
+                }
+
+            }
         }
     }
 }

@@ -49,26 +49,17 @@ namespace Ductulator.Core
         public static double HeigthSize(Element elm)
         {
             Connector elmConn = CurrentElmConn.elmConn(elm);
-
-            double result;
             double b_Side = elmConn.Height;
-            result = Math.Round(b_Side, 2);
 
-            return result;
+            return b_Side;
         }
 
         public static double WidthSize(Element elm)
         {
             Connector elmConn = CurrentElmConn.elmConn(elm);
-
-            double result;
             double b_Side = elmConn.Width;
 
-            //ForgeTypeId currentUnit = GetUnitTypeId(elm);
-            //double converted = UnitUtils.Convert(b_Side, currentUnit, UnitTypeId.Inches);
-            result = Math.Round(b_Side, 2);
-
-            return result;
+            return b_Side;
         }
 
         public static double factorConvertion(Element elm)
