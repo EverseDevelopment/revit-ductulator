@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ApplicationPackage SchemaVersion="1.0"
 	ProductType="Application"
-	Name="Nancy Ductulator"
-	AppVersion="1.0.0.0"
-    Description="Nancy Ductulator"
+	Name="NancyDuctulator"
+	AppVersion="1.0.0"
+    Description="NancyDuctulator"
     SupportedLocales="Enu"
     Author="e-verse"
     AutodeskProduct="Revit"
     FriendlyVersion="1.0.0"
     AppNameSpace="appstore.exchange.autodesk.com">
 
-    <CompanyDetails Name="Leia" />
+	<CompanyDetails Name="Nancy" />
 
-    <RuntimeRequirements OS="Win32|Win64" Platform="Revit" SeriesMin="R2023" SeriesMax="R2026" />
+	<RuntimeRequirements OS="Win32|Win64" Platform="Revit" SeriesMin="R2023" SeriesMax="R2026" />
 
-    <Components Description="2023 parts">
-        <RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2023" SeriesMax="R2023" />
-        <ComponentEntry AppName="Nancy Ductulator" Version="1.0.0.0" ModuleName="./Contents/2023/Ductulator.addin" AppDescription="Nancy Ductulator" />
-    </Components>
+	<Components Description="2023 parts">
+		<RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2023" SeriesMax="R2023" />
+		<ComponentEntry AppName="Nancy Ductulator" Version="1.0.0.0" ModuleName="./Contents/2023/Ductulator.addin" AppDescription="Nancy Ductulator" />
+	</Components>
 
 	<Components Description="2024 parts">
 		<RuntimeRequirements OS="Win64" Platform="Revit" SeriesMin="R2024" SeriesMax="R2024" />
