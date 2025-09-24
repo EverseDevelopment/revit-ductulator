@@ -8,7 +8,7 @@ namespace Ductulator.Utils
 {
     class CommonAssemblyInfo
     {
-        private static string number = "1.1.0.0";
+        private static string number = "1.0.0";
         public static string Number
         {
             get { return number; }
